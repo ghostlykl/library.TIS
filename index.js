@@ -36,7 +36,7 @@ app.use(express.static('views'));
 
 app.use('/dashboard', function (request, response) {
   response.render('dashboard', {
-    data:data,
+    data: data,
   });
 });
 
@@ -44,7 +44,7 @@ let jsonfile = require('jsonfile');
 
 let file = jsonfile.readFileSync('data.json');
 
-app.put('/edit/:id', function (req, res) {
+app.put('/book/:id', function (req, res) {
   let id = req.params.id;
   let newText = req.body.text;
 
@@ -58,7 +58,7 @@ app.put('/edit/:id', function (req, res) {
   });
 });
 
-app.post('/addTask', (req, res) => {
+app.post('/book', (req, res) => {
   if (!req.body) return res.sendStatus(400);
   const user = {
     id: file.length,
@@ -75,7 +75,7 @@ app.post('/addTask', (req, res) => {
   });
 });
 
-app.delete('/delete/:id', (req, res) => {
+app.delete('/book/:id', (req, res) => {
   jsonfile.readFile('data.json', (err, obj) => {
     if (err) throw err;
     let fileObj = obj;
