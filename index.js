@@ -49,23 +49,31 @@ app.get('/book/:id', (req, res) => {
 
 app.put('/book/:id', function (req, res) {
   let id = req.params.id;
-  let newText = req.body.text;
+  let {name, data1, data2, author, year} = req.body;
 
   jsonfile.readFile('data.json', function (err, obj) {
     let fileObj = obj;
-    fileObj[id].text = newText;
+    fileObj[id].name = name;
+    fileObj[id].data1 = data1;
+    fileObj[id].data2 = data2;
+    fileObj[id].author = author;
+    fileObj[id].year = year;
     jsonfile.writeFile('data.json', fileObj, function (err) {
       if (err) throw err;
     });
-    res.send(JSON.stringify(data, null, '\t'));
+    res.send(JSON.stringify(data[id], null, '\t'));
   });
 });
 
 app.post('/book', (req, res) => {
   if (!req.body) return res.sendStatus(400);
   const user = {
-    id: file.length,
-    text: req.body.text,
+    id: file.length + 1,
+    name: req.body.name,
+    data1: req.body.data1,
+    data2: req.body.data2,
+    author: req.body.author,
+    year: req.body.year,
   };
   jsonfile.readFile('data.json', (err, obj) => {
     if (err) throw err;
