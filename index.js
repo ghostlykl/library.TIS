@@ -30,19 +30,22 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.set('view engine', 'pug');
-
-app.use(express.static('views'));
-
-app.use('/dashboard', function (request, response) {
-  response.render('dashboard', {
-    data: data,
-  });
-});
 
 let jsonfile = require('jsonfile');
 
 let file = jsonfile.readFileSync('data.json');
+
+app.get('/book', (req, res) => {
+  res.status(200).type('text/plain')
+  res.send(JSON.stringify(data, null, '\t'))
+});
+
+app.get('/book/:id', (req, res) => {
+  res.status(200).type('text/plain')
+  let id = req.params.id;
+  res.send(JSON.stringify(data[id], null, '\t'));
+
+});
 
 app.put('/book/:id', function (req, res) {
   let id = req.params.id;
@@ -54,7 +57,7 @@ app.put('/book/:id', function (req, res) {
     jsonfile.writeFile('data.json', fileObj, function (err) {
       if (err) throw err;
     });
-    res.send(obj);
+    res.send(JSON.stringify(data, null, '\t'));
   });
 });
 
@@ -71,7 +74,7 @@ app.post('/book', (req, res) => {
     jsonfile.writeFile('data.json', fileObj, (err) => {
       if (err) throw err;
     });
-    res.send(obj);
+    res.send(JSON.stringify(data, null, '\t'));
   });
 });
 
@@ -87,7 +90,7 @@ app.delete('/book/:id', (req, res) => {
     jsonfile.writeFile('data.json', fileObj, { spaces: 2 }, (err) => {
       if (err) throw err;
     });
-    res.send(obj);
+    res.send(JSON.stringify(data, null, '\t'));
   });
 });
 
